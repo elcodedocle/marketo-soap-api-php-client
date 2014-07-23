@@ -1,0 +1,14 @@
+<phpunit colors="true" bootstrap="bootstrap.php">
+    <!--
+    <filter>
+        <blacklist>
+           <directory suffix=".php">./</directory>
+        </blacklist>
+    </filter>
+    -->
+    <testsuites>
+        <testsuite name="marketo-soap-api-client">
+            <file>MarketoSoapApiClientTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

@@ -1,0 +1,54 @@
+<?php
+/**
+ * Marketo API PHP Client config file.
+ *
+ * In order to run the tests, fill in your Marketo credentials and save as
+ * config.php
+ *
+ */
+ 
+$userid = '<YOUR-MARKETO-API-USER-ID>'; // replace with your user id
+$secretkey = '<YOUR-MARKETO-SECRET-KEY>'; // replace with your secret key
+
+// replace with your Marketo soap endpoint (without ?WSDL at the end)
+$soapEndpoint = 'https://<YOUR-MUNCHKIN-ID>.mktoapi.com/soap/mktows/2_2';
+
+$leadCookie = ''; // fill in with some lead cookie value you want to test
+
+
+// The name of an existing program, E.g.
+$programName = 'testProgram';
+
+// The name of an existing smart campaign, E.g.
+$campaignName = 'testCampaign';
+
+// The tokens required to schedule the campaign, E.g.
+$tokens = array();
+$token = new stdClass();
+$token->name = "{{my.post name}}";
+$token->value = 'Test Name';
+$tokens[] = $token;
+$token = new stdClass();
+$token->name = "{{my.post author}}";
+$token->value = 'Test Author';
+$tokens[] = $token;
+$token = new stdClass();
+$token->name = "{{my.post category}}";
+$token->value = 'Test Category';
+$tokens[] = $token;
+$token = new stdClass();
+$token->name = "{{my.post tags}}";
+$token->value = 'testTag1, testTag2';
+$tokens[] = $token;
+$token = new stdClass();
+$token->name = "{{my.post excerpt}}";
+$token->value = 'Test Excerpt';
+$tokens[] = $token;
+$token = new stdClass();
+$token->name = "{{my.featured image URL}}";
+$token->value = 'http://example.com/testImageURL';
+$tokens[] = $token;
+$token = new stdClass();
+$token->name = "{{my.post URL}}";
+$token->value = 'http://example.com/testPostURL';
+$tokens[] = $token;
