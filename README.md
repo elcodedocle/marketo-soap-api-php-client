@@ -21,6 +21,7 @@ to an API client module instead, other than:
  - Extendable. 
  - Scalable. 
  - Reusable. 
+ - More manageable.
  - It saves quite a few lines of code. 
  
 Since there was no API client implementing the methods I needed and considering
