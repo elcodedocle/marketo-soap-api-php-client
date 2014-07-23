@@ -11,8 +11,8 @@ Marketo SOAP API PHP (micro-) Client by elcodedocle
 ### Motivation
 
 I was working on a project which, after doubling in functionality from the 
-specifications of the first release, needed a quick tidy up the API calling 
-code but had no way to justify the work of refactoring that code to use calls 
+specifications of the first release, needed some serious tidying up of the API 
+calling code but had no way to justify the work of rewriting it all to use calls
 to an API client module instead, other than:
 
  - It's cleaner. 
