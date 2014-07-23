@@ -1,6 +1,6 @@
 {
     "name": "elcodedocle/marketo-soap-api-php-client",
-    "type": "SOAP API client",
+    "type": "APIclient",
     "description": "Marketo SOAP API PHP Client",
     "keywords": ["Marketo", "SOAP", "API", "client", "Marketo SOAP API", "Marketo API"],
     "homepage": "https://github.com/elcodedocle/marketo-soap-api-php-client",
