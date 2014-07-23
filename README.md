@@ -40,7 +40,7 @@ And that was it: first (beta) version ready to ship.
 
 ### Requirements
 
- - PHP >=5.3 with curl extensions enabled
+ - PHP >=5.3 with the SOAP extension enabled
  
 ### Installation
 
