@@ -111,7 +111,8 @@ syncLead, getCampaignsForSource, requestCampaign and scheduleCampaign. I don't
 need to use any more methods right now, but I'll be implementing more as I need
 them, and any requests will be considered and implemented in order of 
 popularity, so don't hessitate on opening/+1 a ticket or a pull request if you 
-like this code and want to extend it yourself).
+like this code and want to extend it yourself or see it extended by someone 
+else).
 
 ### Acks
 
