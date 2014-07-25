@@ -3,15 +3,9 @@
  * Test MarketoSoapApiClient
  */
 
-namespace au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\tests\phpunit;
 
 require_once 'mockups/SoapClientMockup.php';
 require_once '../../MarketoSoapApiClient.php';
-
-use \PHPUnit_Framework_TestCase;
-use \SoapFault;
-use au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\tests\phpunit\mockups\SoapClientMockup;
-use au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\MarketoSoapApiClient;
 
 /**
  * Class MarketoSoapApiClientTest

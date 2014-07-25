@@ -41,7 +41,7 @@ And that was it: first (beta) version ready to ship.
 
 ### Requirements
 
- - PHP >= 5.3.0 with the SOAP extension enabled (and cURL extension for SSL 
+ - PHP >= 5.2.0 with the SOAP extension enabled (and cURL extension for SSL 
 support)
  
 ### Installation
@@ -65,8 +65,6 @@ Create a MarketoSoapApiClient object:
 
 ```php
 require_once 'route/to/MarketoSoapApiClient.php';
-
-use au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\MarketoSoapApiClient;
 
 // replace with your Marketo soap endpoint (without ?WSDL at the end)
 $soapEndpoint = 'https://<YOUR-MUNCHKIN-ID>.mktoapi.com/soap/mktows/2_2';

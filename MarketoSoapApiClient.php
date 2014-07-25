@@ -12,15 +12,6 @@
  * 
  */
 
-namespace au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient;
-
-use \stdClass;
-use \SoapClient;
-use \SoapHeader;
-use \SoapFault;
-use \Exception;
-use \DateTimeZone;
-use \DateTime;
 
 /**
  * Class MarketoSoapApiClient

@@ -3,9 +3,6 @@
  * Mocks the SoapClient class to simulate Marketo SOAP API responses
  */
 
-namespace au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\tests\phpunit\mockups;
-
-use \SoapFault;
 
 /**
  * Class SoapClientMockup
