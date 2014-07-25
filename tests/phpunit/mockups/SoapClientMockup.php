@@ -9,7 +9,7 @@ use \SoapFault;
 
 /**
  * Class SoapClientMockup
- * @package au\com\hooshmarketing\marketoconnector\MarketoSoapApiClient\tests
+ * @package au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\tests\phpunit\mockups
  */
 class SoapClientMockup {
 
