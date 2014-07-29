@@ -244,9 +244,10 @@ class MarketoSoapApiClient {
      * Format Marketo lead object into something easier to work with
      *
      * @param object $result The result of a get_lead call
+     * @param bool $flattenAttributes (defaults to true)
      * @return array An array of formatted lead objects
      */
-    protected function formatLeads($result){
+    protected function formatLeads($result, $flattenAttributes = true){
 
         $leads = array();
 
@@ -260,15 +261,17 @@ class MarketoSoapApiClient {
 
         }
 
-        foreach ($result->result->leadRecordList->leadRecord as $lead){
-
-            $lead->attributes = $this->flattenAttributes(
-                $lead->leadAttributeList->attribute
-            );
-            unset($lead->leadAttributeList);
-
-            array_push($leads, $lead);
-
+        if ($flattenAttributes){
+            foreach ($result->result->leadRecordList->leadRecord as $lead){
+    
+                $lead->attributes = $this->flattenAttributes(
+                    $lead->leadAttributeList->attribute
+                );
+                unset($lead->leadAttributeList);
+    
+                array_push($leads, $lead);
+    
+            }
         }
 
         return $leads;
@@ -303,15 +306,18 @@ class MarketoSoapApiClient {
     }
 
     /**
-     * Gets an array of one or more leads from a lead cookie, lead id or lead 
+     * Gets an array of one or more leads from a lead cookie, lead id or lead
      * email address
-     * 
+     *
      * @param string $type 'COOKIE', 'IDNUM' or 'EMAIL'
      * @param string $value tracking cookie, email address or lead id value
+     * @param bool $flattenAttributes (defaults to true) whether to process the 
+     * result leads through flattenAttributes
+     * @throws Exception
+     * @throws SoapFault
      * @return bool|array a Marketo lead object or false on lead not found
-     * @throws SoapFault|Exception containing an error message
      */
-    public function getLeadBy($type, $value){
+    public function getLeadBy($type, $value, $flattenAttributes = true){
         
         $params = $this->createMarketoGetLeadParams($type, $value);
         $header = $this->createMarketoSoapHeader();
@@ -323,8 +329,8 @@ class MarketoSoapApiClient {
                 $this->options, 
                 $header
             );
-                        
-            return $this->formatLeads($leads);
+            
+            return $this->formatLeads($leads, $flattenAttributes);
             
         } catch(SoapFault $ex) {
             if (
@@ -338,32 +344,39 @@ class MarketoSoapApiClient {
         }
         
     }
-    
+
     /**
      * Create or update lead information
-     * 
+     *
      * Examples
-     * 
+     *
      * When no $lead_key or $cookie is given a new lead will be created
-     * 
+     *
      * `$client->syncLead(array('Email' => 'ben@benubois.com'));`
-     * 
-     * When a $leadKey or $cookie is specified, Marketo will attempt to 
+     *
+     * When a $leadKey or $cookie is specified, Marketo will attempt to
      * identify the lead and update it
-     * 
+     *
      * `$client->syncLead(
-     *     array('Unsubscribed' => false), 
+     *     array('Unsubscribed' => false),
      *     'ben@benubois.com', $_COOKIE['_mkto_trk']
      * );`
-     * 
+     *
      * @param array $leadAttributes Associative array of lead attributes
      * @param null|string $leadKey Optional, The key being used to identify the
      * lead, this can be either an email or Marketo ID
-     * @param null|string $cookie  Optional, The entire _mkto_trk cookie the 
+     * @param null|string $cookie Optional, The entire _mkto_trk cookie the
      * lead will be associated with
+     * @param bool $flattenAttributes (defaults to true)
      * @return object An object containing the lead info
      */
-    public function syncLead($leadAttributes, $leadKey = null, $cookie = null){
+    public function syncLead(
+        $leadAttributes, 
+        $leadKey = null, 
+        $cookie = null, 
+        $flattenAttributes = true
+    ){
+        
         $params = new stdClass;
         $params->marketoCookie = $cookie;
         $params->returnLead = true;
@@ -380,12 +393,15 @@ class MarketoSoapApiClient {
         );
         
         $result = $result->result;
-        $result->leadRecord->attributes = $this->flattenAttributes(
-            $result->leadRecord->leadAttributeList->attribute
-        );
-        unset($result->leadRecord->leadAttributeList);
+        if ($flattenAttributes){
+            $result->leadRecord->attributes = $this->flattenAttributes(
+                $result->leadRecord->leadAttributeList->attribute
+            );
+            unset($result->leadRecord->leadAttributeList);
+        }
 
         return $result;
+        
     }
     
     /**
