@@ -1,48 +1,13 @@
-Marketo SOAP API PHP (micro-) Client by elcodedocle
-===================================================
-#####*Because you don't wanna waste your time writing API wrappers*
+Marketo SOAP API PHP (micro-) Client
+====================================
 
- Copyright (C) 2014 Gael Abadin<br/>
+ Copyright (C) 2014-2016 Gael Abadin<br/>
  License: [MIT Expat][1]<br />
  Version: 0.2.0-beta<br />
  [![Build Status](https://travis-ci.org/elcodedocle/marketo-soap-api-php-client.svg?branch=master)](https://travis-ci.org/elcodedocle/marketo-soap-api-php-client)<br />
  [![Code Climate](https://codeclimate.com/github/elcodedocle/marketo-soap-api-php-client.png)](https://codeclimate.com/github/elcodedocle/marketo-soap-api-php-client)
 
-### Motivation
-
-I was working on a project which, after doubling in functionality from the 
-specifications of the first release, needed some serious tidying up of the API 
-calling code but had no way to justify the work of rewriting it all to use calls
-to an API client module instead, other than:
-
- - It's cleaner. 
- - It's modular.
- - Less complex. 
- - Extendable. 
- - Scalable. 
- - Reusable. 
- - More manageable.
- - It saves quite a few lines of code. 
- 
-Since there was no API client implementing the methods I needed and considering
-how useful would have been to me if somebody had published a FOS one, I decided
-that, instead of charging the client for changes introducing benefits that will
-not be perceived directly or immediatly, I would go and write a basic but more 
-useful open source API client with wrappers for the methods that I use, then 
-release it to the public in case somebody else wants to use it and maybe 
-even extend it.
-
-I started with ~150 lines of code from [Ben Ubois's work for flickerbox](
-https://github.com/flickerbox/marketo/blob/master/marketo.php), 
-introducing some improvements, implementation changes and design changes, 
-mostly to fit my project's design and coding style guidelines. Then I added 
-some extra functionality, fixed a few bugs, did some integration testing... 
-And that was it: first (beta) version ready to ship.
-
-### Requirements
-
- - PHP >= 5.3.0 with the SOAP extension enabled (and cURL extension for SSL 
-support)
+Unofficial PHP client for the Marketo.com SOAP API: http://developers.marketo.com/documentation/soap/. Requires PHP 5.3.0+ with the SOAP extension enabled (and cURL extension for SSL support)
  
 ### Installation
 
@@ -125,8 +90,6 @@ one yourself and have it merged into this project).
 Enjoy!
 
 (
-
-And, if you're happy with this product, donate! 
 
 bitcoin: 1DMD3ymSTKoe16kNme87UnYcrXyZdkWSjD 
 
