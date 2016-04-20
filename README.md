@@ -11,18 +11,11 @@ Unofficial PHP client for the Marketo.com SOAP API: http://developers.marketo.co
  
 ### Installation
 
-You can simply add MarketoSoapClient.php to your project or, if your project
-uses composer, add the dependency to your composer.json file to retrieve  
-the code from packagist on install:
+The recommended way of installing the client is via [Composer](http://getcomposer.org/). Simply run the following command to add the library to your composer.json file.
 
-```json
-...
-"require": {
-        ...
-        "elcodedocle/marketo-soap-api-php-client": "0.2.*@beta"
-    }
-...
-```
+    composer require dchesterton/marketo-rest-api
+
+Alternatively, you can simply add MarketoSoapClient.php to your project.
 
 ### Usage example
 
