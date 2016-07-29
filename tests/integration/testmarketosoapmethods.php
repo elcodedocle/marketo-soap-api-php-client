@@ -1,12 +1,12 @@
 <?php
 /**
- * Integration tests for getLeadBy and scheduleCampaign methods 
- * 
- * Don't forget to edit config.php.dist on the tests folder and save it as 
+ * Integration tests for getLeadBy and scheduleCampaign methods
+ *
+ * Don't forget to edit config.php.dist on the tests folder and save it as
  * config.php
- * 
+ *
  */
-use au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\MarketoSoapApiClient;
+use GaelAbadin\MarketoSoap\MarketoSoapApiClient;
 
 require_once '../../MarketoSoapApiClient.php';
 require_once '../config.php';
@@ -33,10 +33,10 @@ try {
 }
 
 // optional, defaults to 'http://www.marketo.com/mktows/'
-$namespace = 'http://www.marketo.com/mktows/'; 
+$namespace = 'http://www.marketo.com/mktows/';
 
 // optional, defaults to 'America/Los_Angeles'
-$dateTimeZone = new DateTimeZone('America/Los_Angeles'); 
+$dateTimeZone = new DateTimeZone('America/Los_Angeles');
 
 $soapExamples = new MarketoSoapApiClient(
     $userid,
@@ -86,8 +86,8 @@ $runAt = new DateTime('now',$dateTimeZone);
 // output true if the campaign was scheduled, otherwise raise an Exception
 var_export(
     $soapExamples->scheduleCampaign(
-        $programName, 
-        $campaignName, 
+        $programName,
+        $campaignName,
         $tokens,
         $runAt
     )

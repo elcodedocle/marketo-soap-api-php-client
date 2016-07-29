@@ -3,36 +3,36 @@
  * Test MarketoSoapApiClient
  */
 
-namespace au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\tests\phpunit;
+namespace GaelAbadin\MarketoSoap\tests\phpunit;
 
 require_once 'mockups/SoapClientMockup.php';
-require_once '../../MarketoSoapApiClient.php';
+require_once '../../src/MarketoSoapApiClient.php';
 
+use GaelAbadin\MarketoSoap\MarketoSoapApiClient;
 use \PHPUnit_Framework_TestCase;
 use \SoapFault;
-use au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\tests\phpunit\mockups\SoapClientMockup;
-use au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\MarketoSoapApiClient;
+use GaelAbadin\MarketoSoap\tests\phpunit\mockups\SoapClientMockup;
 
 /**
  * Class MarketoSoapApiClientTest
- * @package au\com\hooshmarketing\marketoconnector\MarketoSoapApiClient\tests
+ * @package GaelAbadin\MarketoSoap\tests
  */
 class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
-    
+
     private function getMarketoSoapApiClient($soapClientMockupResponse){
-        
+
         $soapClientMockup = new SoapClientMockup('path/to/wsdl');
         $soapClientMockup->expectedResponse = $soapClientMockupResponse;
-        
+
         $marketoSoapApiClient = new MarketoSoapApiClient(
             'someUserId',
             'someSecretKey',
             $soapClientMockup
         );
 
-        
+
         return $marketoSoapApiClient;
-        
+
     }
 
     public function testGetLeadByOk(){
@@ -42,7 +42,7 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
 
         // set $expectedResponse and $soapClientMockupResponse
         require "mockups/responses/getLead.php";
-        
+
         $marketoSoapApiClient = $this->getMarketoSoapApiClient(
             $soapClientMockupResponse
         );
@@ -51,9 +51,9 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
             $expectedResponse,
             $marketoSoapApiClient->getLeadBy('COOKIE','someLeadId')
         );
-        
+
     }
-    
+
     public function testGetLeadByNotFound(){
 
         $expectedResponse = false;
@@ -78,7 +78,7 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
             $expectedResponse,
             $marketoSoapApiClient->getLeadBy('COOKIE','someLeadId')
         );
-        
+
     }
 
     /**
@@ -93,7 +93,7 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
         );
 
         $marketoSoapApiClient->getLeadBy('COOKIE','someLeadId');
-        
+
     }
 
     public function testSyncLeadOk(){
@@ -153,7 +153,7 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
 
         $expectedResponse = null;
         $soapClientMockupResponse = null;
-        
+
         // set $expectedResponse and $soapClientMockupResponse
         require "mockups/responses/getCampaignsForSources.php";
 
@@ -172,7 +172,7 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
      * @expectedException SoapFault
      */
     public function testGetCampaignsFail(){
-        
+
         $soapClientMockupResponse = new SoapFault("500","500");
 
         $marketoSoapApiClient = $this->getMarketoSoapApiClient(
@@ -237,7 +237,7 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
             'someCampaignName',
             array('IDNUM' => '123456')
         );
-        
+
     }
 
     public function testScheduleCampaignOk(){
@@ -257,7 +257,7 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
                 array()
             )
         );
-        
+
     }
 
     /**
@@ -278,6 +278,5 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
         );
 
     }
-    
+
 }
- 
