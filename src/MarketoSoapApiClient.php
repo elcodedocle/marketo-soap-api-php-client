@@ -121,20 +121,20 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
      *   Lead key type
      */
     protected function keyType($key) {
-      if (filter_var($key, FILTER_VALIDATE_EMAIL)) {
-        $type = 'EMAIL';
-      }
-      elseif (is_int($key) || (is_string($key) && ctype_digit($key))) {
-        $type = 'IDNUM';
-      }
-      elseif (filter_var($key, FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/^id:.*&token:.*/')))) {
-        $type = 'COOKIE';
-      }
-      else {
-        $type = 'UNKNOWN';
-      }
+        if (filter_var($key, FILTER_VALIDATE_EMAIL)) {
+            $type = 'EMAIL';
+        }
+        elseif (is_int($key) || (is_string($key) && ctype_digit($key))) {
+            $type = 'IDNUM';
+        }
+        elseif (filter_var($key, FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/^id:.*&token:.*/')))) {
+            $type = 'COOKIE';
+        }
+        else {
+            $type = 'UNKNOWN';
+        }
 
-      return $type;
+        return $type;
     }
 
     /**
@@ -149,9 +149,9 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
      *   Response object
      */
     protected function request($operation, $params) {
-      return $this->soapClient->__soapCall(
-        $operation, array($params), array(), $this->createMarketoSoapHeader()
-      );
+        return $this->soapClient->__soapCall(
+            $operation, array($params), array(), $this->createMarketoSoapHeader()
+        );
     }
 
 
@@ -169,8 +169,8 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
         $encryptString = $timeStamp . $this->userId;
 
         return array(
-          'hash' => hash_hmac('sha1', $encryptString, $this->secretKey),
-          'timeStamp' => $timeStamp,
+            'hash' => hash_hmac('sha1', $encryptString, $this->secretKey),
+            'timeStamp' => $timeStamp,
         );
 
     }
@@ -356,30 +356,30 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
      * {@inheritdoc}
      */
     public function getLeadActivity($key, $type = NULL) {
-      $lead = new stdClass();
-      $lead->leadKey = new stdClass();
-      $lead->leadKey->keyType = (is_null($type)) ? $this->keyType($key) : strtoupper($type);
-      $lead->leadKey->keyValue = $key;
-      $lead->activityFilter = new stdClass();
-      $lead->startPosition = new stdClass();
-      $lead->batchSize = 100;
+        $lead = new stdClass();
+        $lead->leadKey = new stdClass();
+        $lead->leadKey->keyType = (is_null($type)) ? $this->keyType($key) : strtoupper($type);
+        $lead->leadKey->keyValue = $key;
+        $lead->activityFilter = new stdClass();
+        $lead->startPosition = new stdClass();
+        $lead->batchSize = 100;
 
-      try {
-        $result = $this->request('getLeadActivity', $lead);
-        $activity = $this->prepareLeadActivityResults($result);
-      }
-      catch (\SoapFault $e) {
-
-        if ($this->getErrorCode($e) == MarketoSoapError::ERR_LEAD_NOT_FOUND) {
-          // No leads were found.
-          $activity = array();
+        try {
+            $result = $this->request('getLeadActivity', $lead);
+            $activity = $this->prepareLeadActivityResults($result);
         }
-        else {
-          throw new Exception($e);
-        }
-      }
+        catch (\SoapFault $e) {
 
-      return $activity;
+            if ($this->getErrorCode($e) == MarketoSoapError::ERR_LEAD_NOT_FOUND) {
+                // No leads were found.
+                $activity = array();
+            }
+            else {
+                throw new Exception($e);
+            }
+        }
+
+        return $activity;
     }
 
 
@@ -393,25 +393,25 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
      *   An array of objects defining lead activity data
      */
     protected function prepareLeadActivityResults($marketo_result) {
-      if ($marketo_result->leadActivityList->returnCount > 1) {
-        $activity = $marketo_result->leadActivityList->activityRecordList->activityRecord;
-      }
-      elseif ($marketo_result->leadActivityList->returnCount == 1) {
-        $activity[] = $marketo_result->leadActivityList->activityRecordList->activityRecord;
-      }
-      else {
-        $activity = array();
-      }
-
-      foreach ($activity as &$event) {
-        $event->attributes = array();
-        foreach ($event->activityAttributes->attribute as $attribute) {
-          $event->attributes[$attribute->attrName] = $attribute->attrValue;
+        if ($marketo_result->leadActivityList->returnCount > 1) {
+            $activity = $marketo_result->leadActivityList->activityRecordList->activityRecord;
         }
-        unset($event->activityAttributes);
-      }
+        elseif ($marketo_result->leadActivityList->returnCount == 1) {
+            $activity[] = $marketo_result->leadActivityList->activityRecordList->activityRecord;
+        }
+        else {
+            $activity = array();
+        }
 
-      return $activity;
+        foreach ($activity as &$event) {
+            $event->attributes = array();
+            foreach ($event->activityAttributes->attribute as $attribute) {
+                $event->attributes[$attribute->attrName] = $attribute->attrValue;
+            }
+            unset($event->activityAttributes);
+        }
+
+        return $activity;
     }
 
     /**
@@ -520,6 +520,44 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getFields() {
+        $params = array(
+            'objectName' => 'LeadRecord',
+        );
+        try {
+            $result = $this->request('describeMObject', $params);
+            $fields = $this->prepareFieldResults($result);
+        }
+        catch (Exception $e) {
+            $fields = array();
+        }
+
+        return $fields;
+    }
+
+
+    /**
+     * Converts response into a more useful structure.
+     *
+     * @param object $data
+     *   LeadRecord object definition
+     *
+     * @return array
+     *   Key value pairs of fields
+     */
+    protected function prepareFieldResults($data) {
+        $fields = array();
+
+        foreach ($data->result->metadata->fieldList->field as $field) {
+            $fields[$field->name] = $field->displayName;
+        }
+
+        return $fields;
+    }
+
+    /**
      * (@inheritdoc}
      */
     public function scheduleCampaign(
@@ -597,9 +635,9 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
      *   The error code.
      */
     protected function getErrorCode(\SoapFault $ex) {
-      return !empty($ex->detail->serviceException->code)
-        ? $ex->detail->serviceException->code
-        : 1;
+        return !empty($ex->detail->serviceException->code)
+            ? $ex->detail->serviceException->code
+            : 1;
     }
 
 }

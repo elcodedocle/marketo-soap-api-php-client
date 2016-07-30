@@ -58,6 +58,11 @@ interface MarketoSoapApiClientInterface {
     );
 
     /**
+     * Retrieves list of defined fields.
+     */
+    public function getFields();
+
+    /**
      * Sets and returns Marketo SOAP API Client options
      *
      * @param string $soapEndpoint Marketo SOAP API end point URL
