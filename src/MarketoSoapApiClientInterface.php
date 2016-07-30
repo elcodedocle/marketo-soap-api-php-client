@@ -97,6 +97,16 @@ interface MarketoSoapApiClientInterface {
     public function getLeadBy ($type, $value, $flattenAttributes = true);
 
     /**
+     * Retrieves lead activity information.
+     *
+     * @param string $key
+     *   Lead Key, typically email address.
+     * @param string $type
+     *   Lead key type, auto-detection attempted if not supplied.
+     */
+    public function getLeadActivity($key, $type);
+
+  /**
      * Create or update lead information
      *
      * Examples
