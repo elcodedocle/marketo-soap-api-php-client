@@ -523,9 +523,9 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
      * {@inheritdoc}
      */
     public function getFields() {
-        $params = array(
-            'objectName' => 'LeadRecord',
-        );
+        $params = new stdClass();
+        $params->objectName = 'LeadRecord';
+
         try {
             $result = $this->request('describeMObject', $params);
             $fields = $this->prepareFieldResults($result);
