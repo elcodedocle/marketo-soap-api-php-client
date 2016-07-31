@@ -2,7 +2,11 @@ language: php
 
 ##services:
 
-##env:
+env:
+  global:
+    - marketo_api_id='bigcorp2_458073844B29ACAFC64AC0'
+    - marketo_api_secret='425794457179585644BB2299AACCBB01CC66229C2B35'
+    - marketo_api_uri='https://example.mktoapi.com/soap/mktows/2_9'
 
 php:
   - 5.3

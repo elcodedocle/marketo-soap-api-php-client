@@ -108,7 +108,7 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
         $this->namespace = $namespace;
         $this->dateTimeZone = !empty($dateTimeZone)
             ? $dateTimeZone
-            : date_default_timezone_get();
+            : new DateTimeZone(date_default_timezone_get());
     }
 
     /**
@@ -570,7 +570,7 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
         }
 
         if ($runAt === null){
-            $runAt = new DateTime('now',$this->dateTimeZone);
+            $runAt = new DateTime('now', $this->dateTimeZone);
         }
 
         // Create Request
