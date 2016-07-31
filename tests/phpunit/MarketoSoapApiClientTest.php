@@ -19,264 +19,264 @@ use GaelAbadin\MarketoSoap\tests\phpunit\mockups\SoapClientMockup;
  */
 class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
 
-    private function getMarketoSoapApiClient($soapClientMockupResponse){
+  private function getMarketoSoapApiClient($soapClientMockupResponse){
 
-        $soapClientMockup = new SoapClientMockup('path/to/wsdl');
-        $soapClientMockup->expectedResponse = $soapClientMockupResponse;
+    $soapClientMockup = new SoapClientMockup('path/to/wsdl');
+    $soapClientMockup->expectedResponse = $soapClientMockupResponse;
 
-        $marketoSoapApiClient = new MarketoSoapApiClient(
-            'someUserId',
-            'someSecretKey',
-            $soapClientMockup
-        );
+    $marketoSoapApiClient = new MarketoSoapApiClient(
+      'someUserId',
+      'someSecretKey',
+      $soapClientMockup
+    );
 
 
-        return $marketoSoapApiClient;
+    return $marketoSoapApiClient;
 
-    }
+  }
 
-    public function testGetLeadByOk(){
+  public function testGetLeadByOk(){
 
-        $soapClientMockupResponse = null;
-        $expectedResponse = null;
+    $soapClientMockupResponse = null;
+    $expectedResponse = null;
 
-        // set $expectedResponse and $soapClientMockupResponse
-        require "mockups/responses/getLead.php";
+    // set $expectedResponse and $soapClientMockupResponse
+    require "mockups/responses/getLead.php";
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $this->assertEquals(
-            $expectedResponse,
-            $marketoSoapApiClient->getLeadBy('COOKIE','someLeadId')
-        );
+    $this->assertEquals(
+      $expectedResponse,
+      $marketoSoapApiClient->getLeadBy('COOKIE','someLeadId')
+    );
 
-    }
+  }
 
-    public function testGetLeadByNotFound(){
+  public function testGetLeadByNotFound(){
 
-        $expectedResponse = false;
-        $soapClientMockupResponse = new SoapFault(
-            "20103",
-            "20103 - Lead not found",
-            null,
-            (object)(array(
-                'serviceException'=>
-                    (object)array(
-                        'code'=>'20103'
-                    )
-            )
-            )
-        );
+    $expectedResponse = false;
+    $soapClientMockupResponse = new SoapFault(
+      "20103",
+      "20103 - Lead not found",
+      null,
+      (object)(array(
+        'serviceException'=>
+          (object)array(
+            'code'=>'20103'
+          )
+      )
+      )
+    );
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $this->assertEquals(
-            $expectedResponse,
-            $marketoSoapApiClient->getLeadBy('COOKIE','someLeadId')
-        );
+    $this->assertEquals(
+      $expectedResponse,
+      $marketoSoapApiClient->getLeadBy('COOKIE','someLeadId')
+    );
 
-    }
+  }
 
-    /**
-     * @expectedException SoapFault
-     */
-    public function testGetLeadByFail(){
+  /**
+   * @expectedException SoapFault
+   */
+  public function testGetLeadByFail(){
 
-        $soapClientMockupResponse = new SoapFault("500","500");
+    $soapClientMockupResponse = new SoapFault("500","500");
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $marketoSoapApiClient->getLeadBy('COOKIE','someLeadId');
+    $marketoSoapApiClient->getLeadBy('COOKIE','someLeadId');
 
-    }
+  }
 
-    public function testSyncLeadOk(){
+  public function testSyncLeadOk(){
 
-        $leadAttributes = null;
-        $expectedResponse = null;
-        $soapClientMockupResponse = null;
+    $leadAttributes = null;
+    $expectedResponse = null;
+    $soapClientMockupResponse = null;
 
-        // set $leadAttributes, $expectedResponse and $soapClientMockupResponse
-        require "mockups/responses/syncLead.php";
+    // set $leadAttributes, $expectedResponse and $soapClientMockupResponse
+    require "mockups/responses/syncLead.php";
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $this->assertEquals(
-            $expectedResponse,
-            $marketoSoapApiClient->syncLead($leadAttributes,1234)
-        );
+    $this->assertEquals(
+      $expectedResponse,
+      $marketoSoapApiClient->syncLead($leadAttributes,1234)
+    );
 
-        // set $leadAttributes, $expectedResponse and $soapClientMockupResponse
-        require "mockups/responses/syncLead.php";
+    // set $leadAttributes, $expectedResponse and $soapClientMockupResponse
+    require "mockups/responses/syncLead.php";
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $this->assertEquals(
-            $expectedResponse,
-            $marketoSoapApiClient->syncLead($leadAttributes,null,'someLeadCookie')
-        );
+    $this->assertEquals(
+      $expectedResponse,
+      $marketoSoapApiClient->syncLead($leadAttributes,null,'someLeadCookie')
+    );
 
-    }
+  }
 
-    /**
-     * @expectedException SoapFault
-     */
-    public function testSyncLeadFail(){
+  /**
+   * @expectedException SoapFault
+   */
+  public function testSyncLeadFail(){
 
-        $soapClientMockupResponse = new SoapFault("500","500");
+    $soapClientMockupResponse = new SoapFault("500","500");
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
-        $lead = $marketoSoapApiClient->buildLeadRecord(
-            array(
-                'FirstName'=>'Some Other First Name',
-            ),
-            1234
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
+    $lead = $marketoSoapApiClient->buildLeadRecord(
+      array(
+        'FirstName'=>'Some Other First Name',
+      ),
+      1234
+    );
 
-        $marketoSoapApiClient->syncLead($lead,1234);
+    $marketoSoapApiClient->syncLead($lead,1234);
 
-    }
+  }
 
-    public function testGetCampaignsOk(){
+  public function testGetCampaignsOk(){
 
-        $expectedResponse = null;
-        $soapClientMockupResponse = null;
+    $expectedResponse = null;
+    $soapClientMockupResponse = null;
 
-        // set $expectedResponse and $soapClientMockupResponse
-        require "mockups/responses/getCampaignsForSources.php";
+    // set $expectedResponse and $soapClientMockupResponse
+    require "mockups/responses/getCampaignsForSources.php";
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $this->assertEquals(
-            $expectedResponse,
-            $marketoSoapApiClient->getCampaigns()
-        );
+    $this->assertEquals(
+      $expectedResponse,
+      $marketoSoapApiClient->getCampaigns()
+    );
 
-    }
+  }
 
-    /**
-     * @expectedException SoapFault
-     */
-    public function testGetCampaignsFail(){
+  /**
+   * @expectedException SoapFault
+   */
+  public function testGetCampaignsFail(){
 
-        $soapClientMockupResponse = new SoapFault("500","500");
+    $soapClientMockupResponse = new SoapFault("500","500");
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $marketoSoapApiClient->getCampaigns();
+    $marketoSoapApiClient->getCampaigns();
 
-    }
+  }
 
-    public function testRunCampaignOnLeadsOk(){
+  public function testRunCampaignOnLeadsOk(){
 
-        $expectedResponse = true;
-        $soapClientMockupResponse = true;
+    $expectedResponse = true;
+    $soapClientMockupResponse = true;
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        // try adding one lead, identifying campaign by name
-        $this->assertEquals(
-            $expectedResponse,
-            $marketoSoapApiClient->runCampaignOnLeads(
-                'someCampaignName', // the campaign name
-                array('IDNUM' => '123456') // the lead id
-            )
-        );
+    // try adding one lead, identifying campaign by name
+    $this->assertEquals(
+      $expectedResponse,
+      $marketoSoapApiClient->runCampaignOnLeads(
+        'someCampaignName', // the campaign name
+        array('IDNUM' => '123456') // the lead id
+      )
+    );
 
-        $expectedResponse = true;
-        $soapClientMockupResponse = true;
+    $expectedResponse = true;
+    $soapClientMockupResponse = true;
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        // adding 2 leads (one id'd by SFDCLEADID), identifying campaign by id
-        $this->assertEquals(
-            $expectedResponse,
-            $marketoSoapApiClient->runCampaignOnLeads(
-                '123', // campaign id
-                $leads = array(
-                    array('SFDCLEADID' => '001d000000FXkBt'), // another lead
-                    array('IDNUM' => '123456') // lead id
-                )
-            )
-        );
+    // adding 2 leads (one id'd by SFDCLEADID), identifying campaign by id
+    $this->assertEquals(
+      $expectedResponse,
+      $marketoSoapApiClient->runCampaignOnLeads(
+        '123', // campaign id
+        $leads = array(
+          array('SFDCLEADID' => '001d000000FXkBt'), // another lead
+          array('IDNUM' => '123456') // lead id
+        )
+      )
+    );
 
-    }
+  }
 
-    /**
-     * @expectedException SoapFault
-     */
-    public function testRunCampaignOnLeadsFail(){
+  /**
+   * @expectedException SoapFault
+   */
+  public function testRunCampaignOnLeadsFail(){
 
-        $soapClientMockupResponse = new SoapFault("500","500");
+    $soapClientMockupResponse = new SoapFault("500","500");
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $marketoSoapApiClient->runCampaignOnLeads(
-            'someCampaignName',
-            array('IDNUM' => '123456')
-        );
+    $marketoSoapApiClient->runCampaignOnLeads(
+      'someCampaignName',
+      array('IDNUM' => '123456')
+    );
 
-    }
+  }
 
-    public function testScheduleCampaignOk(){
+  public function testScheduleCampaignOk(){
 
-        $expectedResponse = true;
-        $soapClientMockupResponse = true;
+    $expectedResponse = true;
+    $soapClientMockupResponse = true;
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $this->assertEquals(
-            $expectedResponse,
-            $marketoSoapApiClient->scheduleCampaign(
-                'someProgramName',
-                'someCampaignName',
-                array()
-            )
-        );
+    $this->assertEquals(
+      $expectedResponse,
+      $marketoSoapApiClient->scheduleCampaign(
+        'someProgramName',
+        'someCampaignName',
+        array()
+      )
+    );
 
-    }
+  }
 
-    /**
-     * @expectedException SoapFault
-     */
-    public function testScheduleCampaignFail(){
+  /**
+   * @expectedException SoapFault
+   */
+  public function testScheduleCampaignFail(){
 
-        $soapClientMockupResponse = new SoapFault("500","500");
+    $soapClientMockupResponse = new SoapFault("500","500");
 
-        $marketoSoapApiClient = $this->getMarketoSoapApiClient(
-            $soapClientMockupResponse
-        );
+    $marketoSoapApiClient = $this->getMarketoSoapApiClient(
+      $soapClientMockupResponse
+    );
 
-        $marketoSoapApiClient->scheduleCampaign(
-            'someProgramName',
-            'someCampaignName',
-            array()
-        );
+    $marketoSoapApiClient->scheduleCampaign(
+      'someProgramName',
+      'someCampaignName',
+      array()
+    );
 
-    }
+  }
 
 }

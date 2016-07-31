@@ -140,10 +140,10 @@ interface MarketoSoapApiClientInterface {
      * @return object An object containing the lead info
      */
     public function syncLead (
-      $leadAttributes,
-      $leadKey = null,
-      $cookie = null,
-      $flattenAttributes = true
+        $leadAttributes,
+        $leadKey = null,
+        $cookie = null,
+        $flattenAttributes = true
     );
 
     /**
