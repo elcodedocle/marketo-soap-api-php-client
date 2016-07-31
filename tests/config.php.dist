@@ -6,7 +6,7 @@
  * config.php
  *
  */
- 
+
 $userid = '<YOUR-MARKETO-API-USER-ID>'; // replace with your user id
 $secretkey = '<YOUR-MARKETO-SECRET-KEY>'; // replace with your secret key
 
