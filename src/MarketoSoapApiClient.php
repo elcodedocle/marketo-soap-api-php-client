@@ -340,9 +340,7 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
             return $this->formatLeads($leads, $flattenAttributes);
 
         } catch(SoapFault $ex) {
-            if (
-                isset($ex->detail)
-                && $ex->detail->serviceException->code === '20103'
+            if ( $this->getErrorCode($ex) === MarketoSoapError::ERR_LEAD_NOT_FOUND
             ){
                 return false;
             }

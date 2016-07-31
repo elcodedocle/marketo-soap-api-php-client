@@ -59,6 +59,9 @@ interface MarketoSoapApiClientInterface {
 
     /**
      * Retrieves list of defined fields.
+     *
+     * @return array
+     *   An array of lead fields defined in marketo.
      */
     public function getFields();
 
