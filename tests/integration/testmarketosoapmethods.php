@@ -6,7 +6,7 @@
  * config.php
  *
  */
-use GaelAbadin\MarketoSoap\MarketoSoapApiClient;
+use CodeCrafts\MarketoSoap\MarketoSoapApiClient;
 
 require_once '../../MarketoSoapApiClient.php';
 require_once '../config.php';

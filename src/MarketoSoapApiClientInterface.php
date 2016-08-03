@@ -3,7 +3,7 @@
  * Core file of the Marketo SOAP API Client project
  *
  * @category   SOAP_API_Client
- * @package    GaelAbadin\MarketoSoap
+ * @package    CodeCrafts\MarketoSoap
  * @author     Gael Abadin
  * @version    v0.2.0-beta
  * @copyright  2014 Gael Abadin
@@ -12,7 +12,7 @@
  *
  */
 
-namespace GaelAbadin\MarketoSoap;
+namespace CodeCrafts\MarketoSoap;
 
 use \stdClass;
 use \SoapClient;
@@ -28,7 +28,7 @@ use \DateTime;
  * Provides an interface to call various Marketo SOAP API methods.
  *
  * @category   SOAP_API_Client
- * @package    GaelAbadin\MarketoSoap
+ * @package    CodeCrafts\MarketoSoap
  * @author     Gael Abadin
  * @version    v0.2.0-beta
  * @copyright  2014 Gael Abadin
