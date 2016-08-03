@@ -1,6 +1,6 @@
 <?php
 
-namespace GaelAbadin\MarketoSoap;
+namespace CodeCrafts\MarketoSoap;
 
 /**
  * Marketo errors.
