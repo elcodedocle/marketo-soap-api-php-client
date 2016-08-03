@@ -3,13 +3,13 @@
  * Mocks the SoapClient class to simulate Marketo SOAP API responses
  */
 
-namespace au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\tests\phpunit\mockups;
+namespace CodeCrafts\MarketoSoap\tests\phpunit\mockups;
 
 use \SoapFault;
 
 /**
  * Class SoapClientMockup
- * @package au\com\hooshmarketing\marketoconnector\modules\marketosoapapiclient\tests\phpunit\mockups
+ * @package CodeCrafts\MarketoSoap\tests\phpunit\mockups
  */
 class SoapClientMockup {
 
@@ -32,7 +32,7 @@ class SoapClientMockup {
      * @var array $options
      */
     private $options;
-    
+
     public function __construct($wsdl, $options = null){
         $this->wsdl = $wsdl;
         $this->options = $options;
@@ -48,10 +48,10 @@ class SoapClientMockup {
      * @return mixed
      */
     public function __soapCall(
-        $function_name, 
-        $arguments, 
-        $options = null, 
-        $input_headers = null, 
+        $function_name,
+        $arguments,
+        $options = null,
+        $input_headers = null,
         &$output_headers = null
     ){
         $this->lastRequest = array(
@@ -61,20 +61,20 @@ class SoapClientMockup {
             'input_headers' => $input_headers,
             'output_headers' => $output_headers,
         );
-        
+
         if ($this->expectedResponse instanceof SoapFault){
             throw $this->expectedResponse;
         }
-        
+
         return $this->expectedResponse;
-        
+
     }
 
     /**
      * @return string
      */
     public function __getLastRequest(){
-        return 
+        return
             "TODO: Mock the XML string containing the last SOAP request\n"
             . var_export($this->lastRequest);
     }
@@ -83,9 +83,9 @@ class SoapClientMockup {
      * @return string
      */
     public function __getLastResponse(){
-        return 
+        return
             "TODO: Mock the XML string containing the last SOAP response\n"
             . var_export($this->expectedResponse);
     }
 
-} 
+}
