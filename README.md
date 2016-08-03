@@ -24,7 +24,7 @@ Create a MarketoSoapApiClient object:
 ```php
 require_once 'route/to/MarketoSoapApiClient.php';
 
-use GaelAbadin\MarketoSoap\MarketoSoapApiClient;
+use CodeCrafts\MarketoSoap\MarketoSoapApiClient;
 
 // replace with your Marketo soap endpoint (without ?WSDL at the end)
 $soapEndpoint = 'https://<YOUR-MUNCHKIN-ID>.mktoapi.com/soap/mktows/2_2';

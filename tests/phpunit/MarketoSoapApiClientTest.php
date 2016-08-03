@@ -3,19 +3,19 @@
  * Test MarketoSoapApiClient
  */
 
-namespace GaelAbadin\MarketoSoap\tests\phpunit;
+namespace CodeCrafts\MarketoSoap\tests\phpunit;
 
 require_once 'mockups/SoapClientMockup.php';
 require_once '../../src/MarketoSoapApiClient.php';
 
-use GaelAbadin\MarketoSoap\MarketoSoapApiClient;
+use CodeCrafts\MarketoSoap\MarketoSoapApiClient;
 use \PHPUnit_Framework_TestCase;
 use \SoapFault;
-use GaelAbadin\MarketoSoap\tests\phpunit\mockups\SoapClientMockup;
+use CodeCrafts\MarketoSoap\tests\phpunit\mockups\SoapClientMockup;
 
 /**
  * Class MarketoSoapApiClientTest
- * @package GaelAbadin\MarketoSoap\tests
+ * @package CodeCrafts\MarketoSoap\tests
  */
 class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
 

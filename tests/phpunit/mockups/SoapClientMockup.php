@@ -3,13 +3,13 @@
  * Mocks the SoapClient class to simulate Marketo SOAP API responses
  */
 
-namespace GaelAbadin\MarketoSoap\tests\phpunit\mockups;
+namespace CodeCrafts\MarketoSoap\tests\phpunit\mockups;
 
 use \SoapFault;
 
 /**
  * Class SoapClientMockup
- * @package GaelAbadin\MarketoSoap\tests\phpunit\mockups
+ * @package CodeCrafts\MarketoSoap\tests\phpunit\mockups
  */
 class SoapClientMockup {
 
