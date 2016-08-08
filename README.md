@@ -3,7 +3,7 @@ Marketo SOAP API PHP (micro-) Client
 
  Copyright (C) 2014-2016 Gael Abadin<br/>
  License: [MIT Expat][1]<br />
- Version: 0.2.0-beta<br />
+ Version: 0.4.0-beta<br />
  [![Build Status](https://travis-ci.org/elcodedocle/marketo-soap-api-php-client.svg?branch=master)](https://travis-ci.org/elcodedocle/marketo-soap-api-php-client)<br />
  [![Code Climate](https://codeclimate.com/github/elcodedocle/marketo-soap-api-php-client.png)](https://codeclimate.com/github/elcodedocle/marketo-soap-api-php-client)
 
