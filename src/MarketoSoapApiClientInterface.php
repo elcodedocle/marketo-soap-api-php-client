@@ -5,7 +5,7 @@
  * @category   SOAP_API_Client
  * @package    CodeCrafts\MarketoSoap
  * @author     Gael Abadin
- * @version    v0.2.0-beta
+ * @version    v0.4.0-beta
  * @copyright  2014 Gael Abadin
  * @license    MIT Expat http://en.wikipedia.org/wiki/Expat_License
  * @link       http://github.com/elcodedocle/marketo-soap-api-client
