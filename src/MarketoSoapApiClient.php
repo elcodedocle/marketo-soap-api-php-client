@@ -366,7 +366,7 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
             $result = $this->request('getLeadActivity', $lead);
             $activity = $this->prepareLeadActivityResults($result);
         }
-        catch (\SoapFault $e) {
+        catch (SoapFault $e) {
 
             if ($this->getErrorCode($e) == MarketoSoapError::ERR_LEAD_NOT_FOUND) {
                 // No leads were found.
@@ -627,12 +627,12 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
      *
      * @see http://php.net/manual/en/class.soapfault.php
      *
-     * @param \SoapFault $ex
+     * @param SoapFault $ex
      *   The SOAP fault object.
      * @return int
      *   The error code.
      */
-    protected function getErrorCode(\SoapFault $ex) {
+    protected function getErrorCode(SoapFault $ex) {
         return !empty($ex->detail->serviceException->code)
             ? $ex->detail->serviceException->code
             : 1;
