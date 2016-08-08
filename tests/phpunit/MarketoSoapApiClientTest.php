@@ -21,15 +21,25 @@ class MarketoSoapApiClientTest extends PHPUnit_Framework_TestCase {
 
   private function getMarketoSoapApiClient($soapClientMockupResponse){
 
-    $soapClientMockup = new SoapClientMockup('path/to/wsdl');
+    // Get API credentials from environment variables. Can use travis encryption
+    // for storage. See: <https://docs.travis-ci.com/user/encryption-keys/>.
+    $id = getenv('marketo_api_id');
+    $secret = getenv('marketo_api_secret');
+    $uri = getenv('marketo_api_uri');
+
+
+    $this->assertNotEmpty($id, 'The `marketo_api_id` environment variable is empty.');
+    $this->assertNotEmpty($secret, 'The `marketo_api_secret` environment variable is empty.');
+    $this->assertNotEmpty($uri, 'The `marketo_api_uri` environment variable is empty.');
+
+    $soapClientMockup = new SoapClientMockup($uri.'?WSDL');
     $soapClientMockup->expectedResponse = $soapClientMockupResponse;
 
     $marketoSoapApiClient = new MarketoSoapApiClient(
-      'someUserId',
-      'someSecretKey',
+      $id,
+      $secret,
       $soapClientMockup
     );
-
 
     return $marketoSoapApiClient;
 

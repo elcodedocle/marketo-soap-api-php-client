@@ -106,13 +106,54 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
         $this->secretKey = $secretKey;
         $this->soapClient = $soapClient;
         $this->namespace = $namespace;
-        if ($dateTimeZone !== null){
-            $this->dateTimeZone = $dateTimeZone;
-        } else {
-            $this->dateTimeZone = new DateTimeZone('America/Los_Angeles');
+        $this->dateTimeZone = !empty($dateTimeZone)
+            ? $dateTimeZone
+            : new DateTimeZone(date_default_timezone_get());
+    }
+
+    /**
+     * Determines lead key type for a given key.
+     *
+     * @param string $key
+     *   The key to examine
+     *
+     * @return string
+     *   Lead key type
+     */
+    protected function keyType($key) {
+        if (filter_var($key, FILTER_VALIDATE_EMAIL)) {
+            $type = 'EMAIL';
+        }
+        elseif (is_int($key) || (is_string($key) && ctype_digit($key))) {
+            $type = 'IDNUM';
+        }
+        elseif (filter_var($key, FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/^id:.*&token:.*/')))) {
+            $type = 'COOKIE';
+        }
+        else {
+            $type = 'UNKNOWN';
         }
 
+        return $type;
     }
+
+    /**
+     * Sends request to Marketo.
+     *
+     * @param string $operation
+     *   The operation to execute
+     * @param object $params
+     *   Parameters to be sent with the request
+     *
+     * @return object
+     *   Response object
+     */
+    protected function request($operation, $params) {
+        return $this->soapClient->__soapCall(
+            $operation, array($params), array(), $this->createMarketoSoapHeader()
+        );
+    }
+
 
     /**
      * Returns Marketo SOAP API required request signature for including in
@@ -127,14 +168,10 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
         $timeStamp = $dtObj->format(DATE_W3C);
         $encryptString = $timeStamp . $this->userId;
 
-        $signature['hash'] = hash_hmac(
-            'sha1',
-            $encryptString,
-            $this->secretKey
+        return array(
+            'hash' => hash_hmac('sha1', $encryptString, $this->secretKey),
+            'timeStamp' => $timeStamp,
         );
-        $signature['timeStamp'] = $timeStamp;
-
-        return $signature;
 
     }
 
@@ -146,10 +183,7 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
      */
     protected function createMarketoSoapHeader(){
 
-        $signature = $this->createMarketoSoapHeaderSignature(
-            $this->userId,
-            $this->secretKey
-        );
+        $signature = $this->createMarketoSoapHeaderSignature();
         $attrs = new stdClass();
         $attrs->mktowsUserId = $this->userId;
         $attrs->requestSignature = $signature['hash'];
@@ -306,16 +340,76 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
             return $this->formatLeads($leads, $flattenAttributes);
 
         } catch(SoapFault $ex) {
-            if (
-                isset($ex->detail)
-                && $ex->detail->serviceException->code === '20103'
+            if ( $this->getErrorCode($ex) === MarketoSoapError::ERR_LEAD_NOT_FOUND
             ){
                 return false;
             }
             error_log ("Error Accessing Marketo SOAP API: ".$ex->getMessage());
             throw ($ex);
         }
+    }
 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLeadActivity($key, $type = NULL) {
+        $lead = new stdClass();
+        $lead->leadKey = new stdClass();
+        $lead->leadKey->keyType = (is_null($type)) ? $this->keyType($key) : strtoupper($type);
+        $lead->leadKey->keyValue = $key;
+        $lead->activityFilter = new stdClass();
+        $lead->startPosition = new stdClass();
+        $lead->batchSize = 100;
+
+        try {
+            $result = $this->request('getLeadActivity', $lead);
+            $activity = $this->prepareLeadActivityResults($result);
+        }
+        catch (\SoapFault $e) {
+
+            if ($this->getErrorCode($e) == MarketoSoapError::ERR_LEAD_NOT_FOUND) {
+                // No leads were found.
+                $activity = array();
+            }
+            else {
+                throw new Exception($e);
+            }
+        }
+
+        return $activity;
+    }
+
+
+    /**
+     * Parses lead activity results into a more useful format.
+     *
+     * @param object $marketo_result
+     *   SOAP response
+     *
+     * @return array
+     *   An array of objects defining lead activity data
+     */
+    protected function prepareLeadActivityResults($marketo_result) {
+        if ($marketo_result->leadActivityList->returnCount > 1) {
+            $activity = $marketo_result->leadActivityList->activityRecordList->activityRecord;
+        }
+        elseif ($marketo_result->leadActivityList->returnCount == 1) {
+            $activity[] = $marketo_result->leadActivityList->activityRecordList->activityRecord;
+        }
+        else {
+            $activity = array();
+        }
+
+        foreach ($activity as &$event) {
+            $event->attributes = array();
+            foreach ($event->activityAttributes->attribute as $attribute) {
+                $event->attributes[$attribute->attrName] = $attribute->attrValue;
+            }
+            unset($event->activityAttributes);
+        }
+
+        return $activity;
     }
 
     /**
@@ -424,6 +518,44 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getFields() {
+        $params = new stdClass();
+        $params->objectName = 'LeadRecord';
+
+        try {
+            $result = $this->request('describeMObject', $params);
+            $fields = $this->prepareFieldResults($result);
+        }
+        catch (Exception $e) {
+            $fields = array();
+        }
+
+        return $fields;
+    }
+
+
+    /**
+     * Converts response into a more useful structure.
+     *
+     * @param object $data
+     *   LeadRecord object definition
+     *
+     * @return array
+     *   Key value pairs of fields
+     */
+    protected function prepareFieldResults($data) {
+        $fields = array();
+
+        foreach ($data->result->metadata->fieldList->field as $field) {
+            $fields[$field->name] = $field->displayName;
+        }
+
+        return $fields;
+    }
+
+    /**
      * (@inheritdoc}
      */
     public function scheduleCampaign(
@@ -438,7 +570,7 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
         }
 
         if ($runAt === null){
-            $runAt = new DateTime('now',$this->dateTimeZone);
+            $runAt = new DateTime('now', $this->dateTimeZone);
         }
 
         // Create Request
@@ -488,6 +620,22 @@ class MarketoSoapApiClient implements MarketoSoapApiClientInterface {
 
         return true;
 
+    }
+
+    /**
+     * Gets a SOAP exception error code.
+     *
+     * @see http://php.net/manual/en/class.soapfault.php
+     *
+     * @param \SoapFault $ex
+     *   The SOAP fault object.
+     * @return int
+     *   The error code.
+     */
+    protected function getErrorCode(\SoapFault $ex) {
+        return !empty($ex->detail->serviceException->code)
+            ? $ex->detail->serviceException->code
+            : 1;
     }
 
 }
