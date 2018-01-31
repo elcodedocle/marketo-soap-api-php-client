@@ -9,7 +9,7 @@ php:
   - 5.4
   - 5.5
 
-dist: trusty
+dist: precise
 
 before_script:
   - composer install
