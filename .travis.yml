@@ -10,11 +10,10 @@ env:
 
 php:
   - 5.3
+    dist: precise
   - 5.4
   - 5.5
   - 7.0
-
-dist: precise
 
 before_script:
   - composer install
