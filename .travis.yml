@@ -4,11 +4,13 @@ language: php
 
 ##env:
 
-php:
-  - 5.3
-    dist: precise
-  - 5.4
-  - 5.5
+matrix:
+  include:
+    - php: 5.3
+      dist: precise
+    - 5.4
+    - 5.5
+    - 7.0
 
 before_script:
   - composer install
