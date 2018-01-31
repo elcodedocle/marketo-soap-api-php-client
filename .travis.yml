@@ -14,6 +14,8 @@ php:
   - 5.5
   - 7.0
 
+dist: precise
+
 before_script:
   - composer install
 
